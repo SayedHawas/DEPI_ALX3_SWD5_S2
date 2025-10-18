@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35919.96 d17.13
+VisualStudioVersion = 17.13.35919.96
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINQDemo", "LINQDemo\LINQDemo.csproj", "{99AB7827-02C5-495C-AEAF-CE38EC47398C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFCoreDemo", "EFCoreDemo\EFCoreDemo.csproj", "{6A15B54A-153B-4D7D-B6EB-D7956FA4B63A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{99AB7827-02C5-495C-AEAF-CE38EC47398C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99AB7827-02C5-495C-AEAF-CE38EC47398C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99AB7827-02C5-495C-AEAF-CE38EC47398C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A15B54A-153B-4D7D-B6EB-D7956FA4B63A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A15B54A-153B-4D7D-B6EB-D7956FA4B63A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A15B54A-153B-4D7D-B6EB-D7956FA4B63A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A15B54A-153B-4D7D-B6EB-D7956FA4B63A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
