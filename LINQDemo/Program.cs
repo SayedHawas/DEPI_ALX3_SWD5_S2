@@ -4,7 +4,8 @@
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello, World!");
+            Console.WriteLine("Hello, DEPI_ALX3_SWD5_S2 !");
+            Console.ReadLine();
         }
     }
 }
