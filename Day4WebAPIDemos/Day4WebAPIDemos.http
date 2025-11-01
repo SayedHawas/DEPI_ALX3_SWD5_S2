@@ -1,0 +1,6 @@
+@Day4WebAPIDemos_HostAddress = http://localhost:5131
+
+GET {{Day4WebAPIDemos_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
