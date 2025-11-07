@@ -11,6 +11,11 @@ namespace Day4WebApiWithDataDemo
             // Add services to the container.
             builder.Services.AddControllers();
 
+            //builder.Services.AddControllers().AddJsonOptions(option =>
+            //{
+            //    option.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+            //});
+
             //Add DI For DbContext
             builder.Services.AddDbContext<AppDbContext>(option =>
             {

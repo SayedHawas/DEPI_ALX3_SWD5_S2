@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Day4WebApiWithDataDemo.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251101172231_CreateDB")]
-    partial class CreateDB
+    [Migration("20251107134319_addseedData")]
+    partial class addseedData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,6 +23,39 @@ namespace Day4WebApiWithDataDemo.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("Day4WebApiWithDataDemo.Models.Department", b =>
+                {
+                    b.Property<int>("DepartmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DepartmentId"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("DepartmentId");
+
+                    b.ToTable("TblDepartments");
+
+                    b.HasData(
+                        new
+                        {
+                            DepartmentId = 1,
+                            Name = "HR"
+                        },
+                        new
+                        {
+                            DepartmentId = 2,
+                            Name = "Developer"
+                        });
+                });
 
             modelBuilder.Entity("Day4WebApiWithDataDemo.Models.Employee", b =>
                 {
@@ -55,9 +88,30 @@ namespace Day4WebApiWithDataDemo.Migrations
                     b.Property<decimal>("Salary")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("departmentId")
+                        .HasColumnType("int");
+
                     b.HasKey("EmployeeId");
 
+                    b.HasIndex("departmentId");
+
                     b.ToTable("TblEmployees");
+                });
+
+            modelBuilder.Entity("Day4WebApiWithDataDemo.Models.Employee", b =>
+                {
+                    b.HasOne("Day4WebApiWithDataDemo.Models.Department", "Department")
+                        .WithMany("Employees")
+                        .HasForeignKey("departmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Department");
+                });
+
+            modelBuilder.Entity("Day4WebApiWithDataDemo.Models.Department", b =>
+                {
+                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }
