@@ -1,5 +1,3 @@
-using Day4WebApiWithDataDemo.Data;
-using Microsoft.EntityFrameworkCore;
 namespace Day4WebApiWithDataDemo
 {
     public class Program
@@ -21,6 +19,14 @@ namespace Day4WebApiWithDataDemo
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            //Add Cors Option 
+            builder.Services.AddCors(options =>
+            options.AddPolicy("MyCors",
+            CorsPolicyBuilder =>
+            {
+                CorsPolicyBuilder.AllowAnyOrigin();
+            }));
+
 
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
@@ -42,6 +48,7 @@ namespace Day4WebApiWithDataDemo
 
             app.UseAuthorization();
 
+            app.UseCors("MyCors");
 
             app.MapControllers();
 

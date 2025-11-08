@@ -1,7 +1,4 @@
-﻿using Day4WebApiWithDataDemo.Models;
-using Microsoft.EntityFrameworkCore;
-
-namespace Day4WebApiWithDataDemo.Data
+﻿namespace Day4WebApiWithDataDemo.Data
 {
     public class AppDbContext : DbContext
     {
@@ -17,7 +14,7 @@ namespace Day4WebApiWithDataDemo.Data
 
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
-
+        public DbSet<Client> Clients { get; set; }
 
         //Override ConnectionString
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
