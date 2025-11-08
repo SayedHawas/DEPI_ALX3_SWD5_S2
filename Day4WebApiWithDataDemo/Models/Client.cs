@@ -3,23 +3,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Day4WebApiWithDataDemo.Models
 {
-    //Data Annotation & Validation 
-    [Table("TblEmployees")]
-    public class Employee
+    [Table("TblClients")]
+    public class Client
     {
         [Key]
-        public int EmployeeId { get; set; }
+        public int ClientId { get; set; }
 
         [Required(ErrorMessage = "Must Enter Name")]
         [StringLength(50, ErrorMessage = "Must Enter 50 Letters Only ...")]
         public string Name { get; set; }
-
-        [Required]
-        [Range(typeof(decimal), "0.00", "999999.99")]
-        public decimal Salary { get; set; }
-
-        [StringLength(200)]
-        public string JobTitle { get; set; }
 
         //^01[0 - 2, 5]{1}[0 - 9]{8}$
         [StringLength(11)]
@@ -30,10 +22,5 @@ namespace Day4WebApiWithDataDemo.Models
         [StringLength(200)]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
-
-        [ForeignKey("Department")]
-        public int departmentId { get; set; }
-        public virtual Department Department { get; set; }
-
     }
 }

@@ -1,0 +1,104 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Client App</title>
+</head>
+<body>
+
+    <div>
+        <h2>All Clients</h2>
+        <ul id="Clients" />
+    </div>
+    <div>
+        <h2>Search by ID</h2>
+        <input type="text" id="Clientid" size="5" />
+        <input type="button" value="Search" onclick="find();" />
+        <p id="Client"> </p>
+    </div>
+    <table>
+        <tr>
+            <th> Name : </th>
+            <td><input type="text" id="name" name="name"></td>
+        </tr>
+        <tr>
+            <th> Email : </th>
+            <td><input type="text" id="email" name="email"></td>
+        </tr>
+        <tr>
+            <th> Mobile : </th>
+            <td><input type="text" id="mobile" name="mobile"></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <input type="button" value="Add" onclick="addClient();"/>
+            </td>
+        </tr>
+    </table>
+
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+    <script>
+        // URI : https://localhost:7029/api/Clients
+        var uri = 'https://localhost:7029/api/Clients';
+
+        $(document).ready(function () {
+            //alert("Welcome")
+            // Send an AJAX request
+            $.getJSON(uri).done(function (data) {
+                //console.log(data);
+                // On success, 'data' contains a list of Employees.
+                $.each(data, function (key, item) {
+
+                    // Add a list item for the Employee.
+                    $('<li>', { text: formatItem(item) }).appendTo($('#Clients'));
+                });
+            });
+
+
+
+           
+        
+        });
+
+
+
+        function formatItem(item) {
+            return item.name + ': $' + item.email;
+        }
+
+        // URI : https://localhost:7029/api/Clients/id
+        function find() {
+            var id = $('#Clientid').val();
+            $.getJSON(uri + '/' + id)
+            .done(function (data) {
+                $('#Client').text(formatItem(data));
+            })
+            .fail(function (jqXHR, textStatus, err) {
+                $('#Client').text('Error: ' + err);
+            });
+        }
+
+        function addClient() {
+            debugger;
+            var obj = {
+                name: $("#name").val(),
+                email: $("#email").val(),
+                mobile: $("#mobile ").val(),
+            };
+            $.ajax({
+                url: uri , //'https://localhost:7029/api/Clients',
+                method: 'POST',
+                contentType: "application/json",
+                data: JSON.stringify(obj),
+                success: function (data) {
+                    debugger;
+                    //console.log(data);
+                    alert(JSON.stringify(data));
+                }, error: function (error) {
+                    // console.log(data);
+                    alert("Error : " + error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
