@@ -1,3 +1,5 @@
+using Day4WebApiWithDataDemo.Services.Impelement;
+using Day4WebApiWithDataDemo.UnitOfWorks;
 namespace Day4WebApiWithDataDemo
 {
     public class Program
@@ -19,6 +21,16 @@ namespace Day4WebApiWithDataDemo
             {
                 option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
+            //Service DI
+            //builder.Services.AddSingleton<DepartmentRepository>();
+            //builder.Services.AddScoped<DepartmentRepository>();
+            //builder.Services.AddTransient<DepartmentRepository>();
+
+            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            builder.Services.AddScoped<IServiceDepartment, ServiceDepartment>();
+            builder.Services.AddScoped<IServiceClient, ServiceClient>();
+
             //Add Cors Option 
             builder.Services.AddCors(options =>
             options.AddPolicy("MyCors",
