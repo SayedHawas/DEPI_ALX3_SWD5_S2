@@ -1,0 +1,22 @@
+﻿@model List<Day8MVCDemo.Models.Category>
+@{
+    ViewData["Title"] = "Index";
+}
+<a href="/Categories/Create"> Create </a>
+<h1>Index</h1>
+<table>
+    <tr>
+        <th> Category Id </th>
+        <th> Name </th>
+        <th> Description </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.CategoryId</td>
+            <td>@item.Name</td>
+            <td>@item.Description</td>
+        </tr>
+    }
+</table>
+

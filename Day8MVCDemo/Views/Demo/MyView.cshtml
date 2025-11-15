@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewData["Title"] = "MyView";
+}
+@{int x = 5;}
+<style>
+    h1{
+     color:red;
+    }
+</style>
+
+<h1>@x</h1>
+<h1>MyView @x+@x=@(x+x)</h1>
+<h4> Welcome in My View </h4>
+
+<script>
+    window.alert("Welcome From JS");
+</script>
+@*Razor Code C# *@
+<ul>
+@{
+    for (int i = 0; i < 10; i++)
+    {
+        <li> @i </li>
+    }
+}
+</ul>
+
+@{
+
+}
