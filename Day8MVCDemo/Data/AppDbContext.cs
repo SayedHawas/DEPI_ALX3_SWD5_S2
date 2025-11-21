@@ -1,5 +1,4 @@
-﻿using Day8MVCDemo.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace Day8MVCDemo.Data
 {
@@ -16,6 +15,8 @@ namespace Day8MVCDemo.Data
         }
         //Add DbSet 
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<User> Users { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);

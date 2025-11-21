@@ -3,19 +3,31 @@
     ViewData["Title"] = "Index";
 }
 <a href="/Categories/Create"> Create </a>
+<br />
+@Html.ActionLink("Create","Create")
 <h1>Index</h1>
 <table>
     <tr>
-        <th> Category Id </th>
-        <th> Name </th>
-        <th> Description </th>
+       @* <th> Category Id </th> *@
+       @*  <th> Name </th> *@
+       @*  <th> Description </th> *@
+        <th> @Html.DisplayNameFor(Model=>Model[0].CategoryId )</th>
+        <th> @Html.DisplayNameFor(Model => Model[0].Name)</th>
+        <th> @Html.DisplayNameFor(Model => Model[0].Description)</th>
+      
     </tr>
     @foreach (var item in Model)
     {
         <tr>
-            <td>@item.CategoryId</td>
-            <td>@item.Name</td>
-            <td>@item.Description</td>
+            @* <td>@item.CategoryId</td> *@
+            @* <td>@item.Name</td> *@
+            @* <td>@item.Description</td> *@
+            <td>@Html.DisplayFor(m => item.CategoryId)</td>
+            <td>@Html.DisplayFor(m => item.Name)</td>
+            <td>@Html.DisplayFor(m => item.Description)</td>
+            <td>@Html.ActionLink("Edit", "Edit", new { id = item.CategoryId })</td>
+            <td>@Html.ActionLink("Details", "Details", new { id = item.CategoryId})</td>
+            <td>@Html.ActionLink("Delete", "Delete", new { id = item.CategoryId })</td>
         </tr>
     }
 </table>

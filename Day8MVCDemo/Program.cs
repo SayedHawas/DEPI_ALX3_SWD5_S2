@@ -1,4 +1,3 @@
-using Day8MVCDemo.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Day8MVCDemo
@@ -36,9 +35,11 @@ namespace Day8MVCDemo
             app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
+                 pattern: "{controller=Site}/{action=index}/{id?}")
+                //pattern: "{controller=Users}/{action=Login}/{id?}")
+                //pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();
-            //https://localhost:7015
+            //https://localhost:7015/Category/edit/4
             app.Run();
         }
     }
