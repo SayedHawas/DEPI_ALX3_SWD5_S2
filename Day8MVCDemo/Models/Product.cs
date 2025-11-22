@@ -12,16 +12,18 @@ namespace Day8MVCDemo.Models
         public string Name { get; set; }
         [StringLength(200, ErrorMessage = "Must Enter Name With 100 Letters")]
         public string Description { get; set; }
-        [Range(typeof(decimal), "0.00", "10000.00", ErrorMessage = "between 0.00 and 10000.00")]
+        [Range(typeof(decimal), "0.00", "100000.00", ErrorMessage = "between 0.00 and 100000.00")]
         public decimal Price { get; set; }
         [NotMapped]
-        public byte[] photo { get; set; }
+        public byte[]? photo { get; set; }
         [StringLength(255, ErrorMessage = "Must Enter Name With 100 Letters")]
+        [Display(Name = "Image")]
         public string PhotoPath { get; set; }
         [ForeignKey("Category")]
+        [Display(Name = "Category")]
         public int categoryId { get; set; }
         //N-Property 
-        public virtual Category Category { get; set; }
+        public virtual Category? Category { get; set; }
 
     }
 }

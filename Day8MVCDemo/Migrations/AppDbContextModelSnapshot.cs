@@ -44,6 +44,32 @@ namespace Day8MVCDemo.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Day8MVCDemo.Models.Department", b =>
+                {
+                    b.Property<int>("DepartmentId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DepartmentId"));
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("ManagerName")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("DepartmentId");
+
+                    b.ToTable("TblDepartments");
+                });
+
             modelBuilder.Entity("Day8MVCDemo.Models.Product", b =>
                 {
                     b.Property<int>("ProductId")

@@ -17,6 +17,7 @@ namespace Day8MVCDemo.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Department> Departments { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
@@ -25,6 +26,13 @@ namespace Day8MVCDemo.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //seed Data 
+            //modelBuilder.Entity<Department>().HasData(new Department()
+            //{
+            //    Name = "HR",
+            //    Description = "",
+            //    ManagerName = "Ahmed"
+            //});
             base.OnModelCreating(modelBuilder);
         }
     }

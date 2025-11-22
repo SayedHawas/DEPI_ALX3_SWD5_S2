@@ -27,6 +27,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day3WebAPIConsumingConsole"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day8MVCDemo", "Day8MVCDemo\Day8MVCDemo.csproj", "{4C62E860-7E42-4F82-B078-D27CBECCF86E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Day3MvcDBFirstDemo", "Day3MvcDBFirstDemo\Day3MvcDBFirstDemo.csproj", "{34A80911-6AD2-49B4-A770-436DFD833A50}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -81,6 +83,10 @@ Global
 		{4C62E860-7E42-4F82-B078-D27CBECCF86E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C62E860-7E42-4F82-B078-D27CBECCF86E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C62E860-7E42-4F82-B078-D27CBECCF86E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34A80911-6AD2-49B4-A770-436DFD833A50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34A80911-6AD2-49B4-A770-436DFD833A50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34A80911-6AD2-49B4-A770-436DFD833A50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34A80911-6AD2-49B4-A770-436DFD833A50}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

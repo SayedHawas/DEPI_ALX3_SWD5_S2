@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Day8MVCDemo.CustomBinding;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,24 +16,57 @@ namespace Day8MVCDemo.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            var appDbContext = _context.Products.Include(p => p.Category);
-            return View(await appDbContext.ToListAsync());
+            //var appDbContext = _context.Products.Include(p => p.Category);
+            //return View(await appDbContext.ToListAsync());
+
+
+            var listProduct = await _context.Products.Include(p => p.Category).ToListAsync();
+            List<Product> products = new List<Product>();
+            foreach (var item in listProduct)
+            {
+                if (System.IO.File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/products", item.PhotoPath)))
+                {
+                    products.Add(item);
+                }
+                else
+                {
+                    item.PhotoPath = "";
+                    products.Add(item);
+                }
+            }
+            return View(products.ToList());
         }
 
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            #region OldCode
+            //if (id == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //var product = await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(m => m.ProductId == id);
+            //if (product == null)
+            //{
+            //    return NotFound();
+            //}
+
+            //return View(product); 
+            #endregion
             if (id == null)
             {
                 return NotFound();
             }
-
-            var product = await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(m => m.ProductId == id);
+            var product = await _context.Products.FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return NotFound();
             }
-
+            if (!System.IO.File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/products", product.PhotoPath)))
+            {
+                product.PhotoPath = "";
+            }
             return View(product);
         }
 
@@ -48,8 +82,19 @@ namespace Day8MVCDemo.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Product product)
+        public async Task<IActionResult> Create([ModelBinder(typeof(ProductModelBind))] Product product, IFormFile PhotoPath)
         {
+            if (PhotoPath != null && PhotoPath.Length > 0)
+            {
+                //~
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/products", PhotoPath.FileName);
+                //Stream File As Byte Array
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await PhotoPath.CopyToAsync(stream);
+                }
+                product.PhotoPath = PhotoPath.FileName;
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(product);

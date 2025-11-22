@@ -10,8 +10,8 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="Create" method="Post" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
@@ -29,13 +29,18 @@
             </div>
             <div class="form-group">
                 <label asp-for="PhotoPath" class="control-label"></label>
-                <input asp-for="PhotoPath" class="form-control" />
+                <input type="file" asp-for="PhotoPath" class="form-control" />
+               @*  <input type="file" name="Photo" class="form-control" /> *@
                 <span asp-validation-for="PhotoPath" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="categoryId" class="control-label"></label>
-                <select asp-for="categoryId" class ="form-control" asp-items="ViewBag.categoryId"></select>
+                <select asp-for="categoryId" class ="form-control" asp-items="ViewBag.categoryId">
+                    <option value="0"> --- Select Category --- </option>
+                </select>
+                <span asp-validation-for="categoryId" class="text-danger"></span>
             </div>
+            <br />
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
