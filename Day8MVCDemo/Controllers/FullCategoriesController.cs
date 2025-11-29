@@ -1,21 +1,25 @@
-﻿using Day8MVCDemo.Data;
-using Day8MVCDemo.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Day8MVCDemo.Controllers
 {
     public class FullCategoriesController : Controller
     {
-        private readonly AppDbContext _context;
-        public FullCategoriesController(AppDbContext context)
+        //private readonly AppDbContext _context;
+        //public FullCategoriesController(AppDbContext context)
+        //{
+        //    _context = context;
+        //}
+
+        private readonly IServiceCategory _context;
+        public FullCategoriesController(IServiceCategory context)
         {
-            _context = context;
+            this._context = context;
         }
         // GET: FullCategories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            return View(await _context.GetCategoriesAsync());
         }
         // GET: FullCategories/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -24,7 +28,7 @@ namespace Day8MVCDemo.Controllers
             {
                 return NotFound();
             }
-            var category = await _context.Categories.FirstOrDefaultAsync(m => m.CategoryId == id);
+            var category = await _context.GetCategoryByIDAsync(id);
             if (category == null)
             {
                 return NotFound();
@@ -45,8 +49,9 @@ namespace Day8MVCDemo.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(category);
-                await _context.SaveChangesAsync();
+                //_context.Add(category);
+                //await _context.SaveChangesAsync();
+                _context.AddCategory(category);
                 return RedirectToAction(nameof(Index));
             }
             return View(category);
@@ -58,7 +63,8 @@ namespace Day8MVCDemo.Controllers
             {
                 return NotFound();
             }
-            var category = await _context.Categories.FindAsync(id);
+            //var category = await _context.Categories.FindAsync(id);
+            var category = await _context.GetCategoryByIDAsync(id);
             if (category == null)
             {
                 return NotFound();
@@ -80,19 +86,20 @@ namespace Day8MVCDemo.Controllers
             {
                 try
                 {
-                    _context.Update(category);
-                    await _context.SaveChangesAsync();
+                    //_context.Update(category);
+                    //await _context.SaveChangesAsync();
+                    _context.UpdateCategory(category);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!CategoryExists(category.CategoryId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    //if (!CategoryExists(category.CategoryId))
+                    //{
+                    //    return NotFound();
+                    //}
+                    //else
+                    //{
+                    throw;
+                    //}
                 }
                 return RedirectToAction(nameof(Index));
             }
@@ -105,7 +112,8 @@ namespace Day8MVCDemo.Controllers
             {
                 return NotFound();
             }
-            var category = await _context.Categories.FirstOrDefaultAsync(m => m.CategoryId == id);
+            //var category = await _context.Categories.FirstOrDefaultAsync(m => m.CategoryId == id);
+            var category = await _context.GetCategoryByIDAsync(id);
             if (category == null)
             {
                 return NotFound();
@@ -117,17 +125,22 @@ namespace Day8MVCDemo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            //var category = await _context.Categories.FindAsync(id);
+            var category = await _context.GetCategoryByIDAsync(id);
             if (category != null)
             {
-                _context.Categories.Remove(category);
+                _context.DeleteCategory(id);
             }
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        private bool CategoryExists(int id)
+        //private bool CategoryExists(int id)
+        //{
+        //    return _context.Categories.Any(e => e.CategoryId == id);
+        //}
+        public async Task<IEnumerable<Category>> GetWithPagnation(int page = 1, int pageSize = 6)
         {
-            return _context.Categories.Any(e => e.CategoryId == id);
+            return await _context.PaginationCategoryAsync(page, pageSize);
         }
     }
 }
