@@ -12,15 +12,13 @@ namespace Day8MVCDemo.Controllers
         {
             _context = context;
         }
-
         // GET: Products
         public async Task<IActionResult> Index()
         {
             //var appDbContext = _context.Products.Include(p => p.Category);
             //return View(await appDbContext.ToListAsync());
 
-
-            var listProduct = await _context.Products.Include(p => p.Category).ToListAsync();
+            var listProduct = await _context.Products.AsNoTracking().Include(p => p.Category).ToListAsync();
             List<Product> products = new List<Product>();
             foreach (var item in listProduct)
             {
@@ -36,7 +34,6 @@ namespace Day8MVCDemo.Controllers
             }
             return View(products.ToList());
         }
-
         // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -58,7 +55,7 @@ namespace Day8MVCDemo.Controllers
             {
                 return NotFound();
             }
-            var product = await _context.Products.FirstOrDefaultAsync(m => m.ProductId == id);
+            var product = await _context.Products.AsNoTracking().FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return NotFound();
@@ -69,14 +66,12 @@ namespace Day8MVCDemo.Controllers
             }
             return View(product);
         }
-
         // GET: Products/Create
         public IActionResult Create()
         {
             ViewData["categoryId"] = new SelectList(_context.Categories, "CategoryId", "Name");
             return View();
         }
-
         // POST: Products/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -86,14 +81,21 @@ namespace Day8MVCDemo.Controllers
         {
             if (PhotoPath != null && PhotoPath.Length > 0)
             {
+                //RenName
+                //ii.png
+                string _Extenstion = Path.GetExtension(PhotoPath.FileName); //.png
+                string _fileName = DateTime.Now.ToString("yyMMddhhmmssfff") + _Extenstion;
+                product.PhotoPath = _fileName;
+
                 //~
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/products", PhotoPath.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/products", _fileName);
                 //Stream File As Byte Array
+                //using (var stream = new FileStream(filePath, FileMode.Create))
                 using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await PhotoPath.CopyToAsync(stream);
                 }
-                product.PhotoPath = PhotoPath.FileName;
+                //product.PhotoPath = PhotoPath.FileName;
             }
             if (ModelState.IsValid)
             {
@@ -104,7 +106,6 @@ namespace Day8MVCDemo.Controllers
             ViewData["categoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.categoryId);
             return View(product);
         }
-
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -121,19 +122,36 @@ namespace Day8MVCDemo.Controllers
             ViewData["categoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.categoryId);
             return View(product);
         }
-
         // POST: Products/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Product product)
+        public async Task<IActionResult> Edit(int id, Product product, IFormFile PhotoPath)
         {
+            if (PhotoPath != null && PhotoPath.Length > 0)
+            {
+                //RenName
+                //ii.png
+                string _Extenstion = Path.GetExtension(PhotoPath.FileName); //.png
+                string _fileName = DateTime.Now.ToString("yyMMddhhmmssfff") + _Extenstion;
+                product.PhotoPath = _fileName;
+
+                //~
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/products", _fileName);
+                //Stream File As Byte Array
+                //using (var stream = new FileStream(filePath, FileMode.Create))
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await PhotoPath.CopyToAsync(stream);
+                }
+                //product.PhotoPath = PhotoPath.FileName;
+            }
+            //Remove Old Image  ??
             if (id != product.ProductId)
             {
                 return NotFound();
             }
-
             if (ModelState.IsValid)
             {
                 try
@@ -157,7 +175,6 @@ namespace Day8MVCDemo.Controllers
             ViewData["categoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.categoryId);
             return View(product);
         }
-
         // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -176,7 +193,6 @@ namespace Day8MVCDemo.Controllers
 
             return View(product);
         }
-
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -196,5 +212,66 @@ namespace Day8MVCDemo.Controllers
         {
             return _context.Products.Any(e => e.ProductId == id);
         }
+
+        #region More Oprtaions
+        [HttpGet]
+        public async Task<IActionResult> Card(int? id)
+        {
+            if (id == null)
+            {
+                return BadRequest();
+            }
+            var product = await _context.Products.AsNoTracking().FirstOrDefaultAsync(m => m.ProductId == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+            if (System.IO.File.Exists(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/products", product.PhotoPath)))
+            {
+                return View(product);
+            }
+            else
+            {
+                product.PhotoPath = "";
+                return View(product);
+            }
+        }
+        [HttpGet]
+        public async Task<IActionResult> Gallery()
+        {
+            return View(await _context.Products.AsNoTracking().ToListAsync());
+        }
+        public async Task<IActionResult> GalleryWithPagnation(int page = 1, int pageSize = 6)
+        {
+            var totalItems = await _context.Products.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+
+            //var products = await _context.Products.AsNoTracking().ToListAsync();
+            //var products = await _context.Products.Skip((page - 1) * pageSize).Take(pageSize).AsNoTracking().ToListAsync();
+
+            // IEnumerable<Product>  Vs IQueryable<Product>
+            //    In Memory                in SQL 
+
+            var products = await _context.Products
+                .OrderBy(p => p.ProductId)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalItems = totalItems;
+
+            return View(products);
+        }
+        #endregion
+
     }
 }
+
+//var products = await _context.Products
+//    .OrderBy(p => p.ProductId)
+//    .Skip((page - 1) * pageSize)
+//    .Take(pageSize)
+//    .ToListAsync();

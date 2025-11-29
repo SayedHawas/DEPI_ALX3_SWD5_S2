@@ -2,7 +2,7 @@
 
 namespace Day8MVCDemo.Data
 {
-    public class AppDbContext : DbContext
+    public class AppDbContext : DbContext//IdentityDbContext 
     {
         public AppDbContext()
         {
