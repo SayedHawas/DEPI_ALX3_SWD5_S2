@@ -10,7 +10,12 @@ namespace Day8MVCDemo
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(); //.AddSessionStateTempDataProvider();
+
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(20);
+            });
 
             //Add ConnectionString 
             builder.Services.AddDbContext<AppDbContext>(option =>
@@ -39,10 +44,13 @@ namespace Day8MVCDemo
             //app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseSession();
+
             app.MapStaticAssets();
+
             app.MapControllerRoute(
                 name: "default",
-                 pattern: "{controller=Site}/{action=index}/{id?}")
+                 pattern: "{controller=Site}/{action=index}/{id:int?}/{name:alpha?}")
                 //pattern: "{controller=Users}/{action=Login}/{id?}")
                 //pattern: "{controller=Home}/{action=Index}/{id?}")
                 .WithStaticAssets();

@@ -8,11 +8,16 @@ namespace Day8MVCDemo.Controllers
     public class ProductsController : Controller
     {
         private readonly AppDbContext _context;
+        [TempData]
+        public string MessageAdd { get; set; }
+        [TempData]
+        public string MessageDelete { get; set; }
         public ProductsController(AppDbContext context)
         {
             _context = context;
         }
         // GET: Products
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             //var appDbContext = _context.Products.Include(p => p.Category);
@@ -79,6 +84,12 @@ namespace Day8MVCDemo.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([ModelBinder(typeof(ProductModelBind))] Product product, IFormFile PhotoPath)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewData["categoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.categoryId);
+                return View(product);
+            }
+
             if (PhotoPath != null && PhotoPath.Length > 0)
             {
                 //RenName
@@ -97,14 +108,12 @@ namespace Day8MVCDemo.Controllers
                 }
                 //product.PhotoPath = PhotoPath.FileName;
             }
-            if (ModelState.IsValid)
-            {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["categoryId"] = new SelectList(_context.Categories, "CategoryId", "Name", product.categoryId);
-            return View(product);
+
+            _context.Add(product);
+            await _context.SaveChangesAsync();
+            //Add Message As TempData
+            MessageAdd = $"Product {product.Name} added";
+            return RedirectToAction(nameof(Index));
         }
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -205,6 +214,9 @@ namespace Day8MVCDemo.Controllers
             }
 
             await _context.SaveChangesAsync();
+            MessageDelete = $"Product {product.Name} successfully deleted!";
+            //TempData["MessageDelete"] = $"Product {product.Name} successfully deleted!";
+            //TempData.Keep("MessageDelete");
             return RedirectToAction(nameof(Index));
         }
 
@@ -267,6 +279,15 @@ namespace Day8MVCDemo.Controllers
         }
         #endregion
 
+
+        public IActionResult CheckPrice(decimal Price)
+        {
+            if (Price > 1)
+            {
+                return Json(true);
+            }
+            return Json(false);
+        }
     }
 }
 
