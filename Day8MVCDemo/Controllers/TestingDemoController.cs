@@ -9,5 +9,10 @@ namespace Day8MVCDemo.Controllers
             ViewData["TestText"] = "Welcome in MVC Unit Test ";
             return View();
         }
+
+        public double div(double number1, double number2)
+        {
+            return number1 / number2;
+        }
     }
 }

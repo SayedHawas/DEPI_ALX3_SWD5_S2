@@ -1,0 +1,16 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<h2>@ViewBag.MyCookie</h2>
+
+<div class="text-center">
+    <p>
+        <b>Name:</b> @Context.Session.GetString("name")<b>
+            Counter:
+        </b> @Context.Session.GetInt32("Counter").ToString()
+    </p>
+</div>

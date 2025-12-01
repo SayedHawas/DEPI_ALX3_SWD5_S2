@@ -17,6 +17,8 @@ namespace Day8MVCDemo.Controllers
             this._context = context;
         }
         // GET: FullCategories
+
+        //[ResponseCache(Duration = 360)]
         public async Task<IActionResult> Index()
         {
             return View(await _context.GetCategoriesAsync());
